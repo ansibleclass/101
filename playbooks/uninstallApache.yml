@@ -1,0 +1,7 @@
+# setup webservers
+---
+  - hosts: webservers:bastions
+    become: true
+    tasks:
+      - name: update all pkg to latest
+        yum: name=* state=absent

@@ -1,0 +1,41 @@
+# setup webservers
+---
+  - hosts: webservers
+    become: true
+    tasks:
+      - name: install apache webserver
+        yum: name=apache2
+
+      - name: delete index.html
+        file: path=/var/www/html/index.html state=absent
+
+      - name: create new index.html
+        lineinfile: 
+          create: yes
+          path: /var/www/html/index.html
+          line: <html>Heylo server1</html>
+        notify: start apache
+     
+    handlers: 
+       - name: start apache
+         service: name=apache2 state=started
+
+  - hosts: bastions
+    become: true
+    tasks:
+      - name: install apache webserver
+        yum: name=apache2
+
+      - name: delete index.html
+        file: path=/var/www/html/index.html state=absent
+
+      - name: create new index.html
+        lineinfile: 
+          create: yes
+          path: /var/www/html/index.html
+          line: <html>Heylo server2</html>
+        notify: start apache
+     
+    handlers: 
+      - name: start apache
+        service: name=apache2 state=started
