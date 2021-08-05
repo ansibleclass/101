@@ -4,10 +4,10 @@
     become: true
     tasks:
       - name: update all
-          apt: name=* state=latest
-    gather_facts: no
+        apt: name=* state=latest
+    
       - name: install apache webserver
-        yum: name=apache2
+        yum: name=apache2 state=present
 
       - name: delete index.html
         file: path=/var/www/html/index.html state=absent
@@ -16,36 +16,16 @@
         file: 
           path: /var/www/github
           state: directory
+
       - name: dld git repo
         git:
-          repo: https://github.com/ansibleclass/101.git
+          repo: 'https://github.com/ansibleclass/101.git'
           dest: /var/www/github
       
-      -name: cp inde to target html folder
+      - name: cp inde to target html folder
         command: mv /var/www/github/index.html /var/www/html
         notify: start apache
 
-     
     handlers: 
        - name: start apache
          service: name=apache2 state=started
-
-  - hosts: bastions
-    become: true
-    tasks:
-      - name: install apache webserver
-        yum: name=apache2
-
-      - name: delete index.html
-        file: path=/var/www/html/index.html state=absent
-
-      - name: create new index.html
-        lineinfile: 
-          create: yes
-          path: /var/www/html/index.html
-          line: <html>Heylo server2</html>
-        notify: start apache
-     
-    handlers: 
-      - name: start apache
-        service: name=apache2 state=started
