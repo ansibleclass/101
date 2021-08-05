@@ -1,0 +1,8 @@
+# get ipv4 address
+---
+  - hosts: server1:server2
+
+    tasks:
+      - name: get the ipv4 address
+        debug:
+          msg: "{{ ansible_all_ipv4_addresses[0] }}"

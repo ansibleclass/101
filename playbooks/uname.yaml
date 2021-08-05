@@ -1,0 +1,13 @@
+# uname playbook
+---
+  #- hosts: webservers:bastions
+   - hosts: all
+     tasks: 
+       - name: get the OS of each server
+         shell: uname
+         changed_when: False
+        
+       - name: hello from carlos
+         debug:
+           msg: "hello from carlos!"
+     gather_facts: no
