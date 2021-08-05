@@ -1,0 +1,13 @@
+# setup webservers
+---
+  - hosts: webservers
+    become: true
+    tasks:
+      - name: update all pkg to latest
+        yum: name=* state=latest
+
+      - name: install apache webserver
+        yum: name=apache2
+
+      - name: delete index.html
+        file: path=/var/www/html/index.html
